@@ -1,25 +1,66 @@
 #![allow(non_snake_case)]
 
 use std::io::Write;
+use std::time::Instant;
 
 //This program takes gets an int input -h- from a user
 // and draws a Christmas Tree with a height of h
 fn main() {
-    print!("Enter an integer for the height of a Christmas Tree: ");
-    println!("{}", get_user_int());
+    print!("Enter a positive integer for the height of a Christmas Tree: ");
+
+    let height = get_user_int();
+
+    //call function to draw tree or exit the app if the input is not a positive int
+    if height <= 0 {
+        println!("The height \'{}\' cannot be negative. Exiting application", height);
+        std::process::exit(1);
+    } else {
+        draw_christmas_tree(height);
+    }
 }
 
+//get user input as int value
 pub fn get_user_int() -> i32 {
     let mut input_int = String::new();
     let _ = std::io::stdout().flush();
-    std::io::stdin()
-        .read_line(&mut input_int)
-        .expect("Failed to enter an integer.");
+    match std::io::stdin().read_line(&mut input_int) {
+        Ok(_) => () ,
+        Err(e) => {
+            println!("{}", e);
+            return -1;
+        }
+    }
 
-    let height: i32 = input_int
-        .trim()
-        .parse()
-        .expect("Input is not an integer");
+    match input_int.trim().parse::<i32>(){
+        Ok(value) => value,
+        Err(e) => {
+            println!("Input was not an int");
+            println!("Error message: {}", e);
+            return -1;
+        }
+    }
+}
 
-    return height;
+//method to receive int input and print tree
+pub fn draw_christmas_tree(h: i32) {
+    let mut branches: i32;
+    let mut spaces: i32;
+    let loop_time = Instant::now();
+    for index in 0..h {
+        spaces = h - (index + 1);
+        branches = (2 * index) + 1;
+        for _ in 0..spaces {
+            print!(" ");
+        }
+
+        for _ in 0..branches {
+            print!("#");
+        }
+
+        if spaces == 0 {
+            print!("\nCode Challenge Complete. Drawing time elapsed: {:.2?}", loop_time.elapsed());
+        } else {
+            println!();
+        }
+    }
 }
