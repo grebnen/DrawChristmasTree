@@ -16,6 +16,7 @@ fn main() {
         std::process::exit(1);
     } else {
         draw_christmas_tree(height);
+        draw_tree(height);
     }
 }
 
@@ -59,8 +60,26 @@ pub fn draw_christmas_tree(h: i32) {
 
         if spaces == 0 {
             print!("\nCode Challenge Complete. Drawing time elapsed: {:.2?}", loop_time.elapsed());
+            println!();
         } else {
             println!();
         }
     }
+}
+
+//method to attempt to print tree faster
+pub fn draw_tree(h: i32){
+    let mut branches: i32;
+    let mut spaces: i32;
+    let loop_time = Instant::now();
+
+    //using one loop instead of 3 by using repeat() function
+    //performance appears better when the amount of rows is lower
+    for index in 0..h {
+        spaces = h - (index + 1);
+        branches = (2 * index) + 1;
+        println!("{}{}", " ".repeat(spaces as usize), "#".repeat(branches as usize));
+    }
+
+    print!("\nCode Challenge Complete. Drawing time elapsed: {:.2?}", loop_time.elapsed());
 }
